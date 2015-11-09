@@ -25,6 +25,9 @@ local.properties
 .settings/
 .loadpath
 
+# Lucen indexes
+DataMgmt/index
+
 # Eclipse Core
 .project
 

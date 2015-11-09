@@ -1,9 +1,0 @@
-package datamanagement.labo2.indexing;
-
-public class IndexNamesStore {
-	public static final String STANDARD = "Standard";
-	public static final String WHITESPACE = "WhiteSpace";
-	public static final String WHITESPACE = "EnglishStop";
-
-
-}
