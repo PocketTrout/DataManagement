@@ -1,0 +1,12 @@
+1446386935367	Delete element
+1446387303603	Rename package 'indexing'
+1446387314378	Rename package 'DataManagement'
+1446387342564	Delete element
+1446387966522	Delete element
+1446388852098	Rename method 'configure'
+1446389702604	Rename type 'Indexer'
+1446391351424	Extract method 'addIdField'
+1446393281844	Delete element
+1446397683426	Copy package
+1446397692868	Delete element
+1446402097890	Rename local variable 'stats'

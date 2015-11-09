@@ -1,0 +1,145 @@
+package datamanagement.labo2.indexing;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.IntField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexOptions;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.search.similarities.DefaultSimilarity;
+import org.apache.lucene.store.FSDirectory;
+
+public class Lab2Indexer {
+
+	private IndexWriter iwriter;
+	private String filePath;
+	private Analyzer analyzer;
+	private DefaultSimilarity similarity;
+	private FieldType fieldType;
+	
+	private static final int ID = 0;
+	private static final int CONTENT = 1;
+	public static final String IDFIELD = "id";
+	public static final String CONTENTFIELD = "content";
+	public static final String INDEXDIR = "index";
+	
+	public Lab2Indexer(Analyzer analyzer, String path) {
+    	this.analyzer = analyzer;
+    	this.filePath = path;
+    	this.similarity = null;
+    	createAndConfigureWriter();
+    	createAndConfigureFieldType();
+    }
+    
+
+	public Lab2Indexer(Analyzer analyzer, String path, DefaultSimilarity similarity) {
+    	this(analyzer,path);
+    	this.similarity = similarity;
+    	createAndConfigureWriter();
+    }
+	
+	private void createAndConfigureFieldType() {
+		FieldType ft = new FieldType();
+		ft.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS); // Indexes documents, frequencies, positions and offsets.
+		ft.setTokenized(true);
+		ft.setStored(true);
+		
+		ft.setStoreTermVectors(true);
+		ft.setStoreTermVectorPositions(true);
+		ft.setStoreTermVectorOffsets(true);
+		
+		ft.freeze();
+		
+		fieldType = ft;
+	}
+    
+    private void createAndConfigureWriter() {
+    	IndexWriterConfig indexWriterConf = new IndexWriterConfig(analyzer);
+    	indexWriterConf.setOpenMode(OpenMode.CREATE); // always create and replace existing index
+    	indexWriterConf.setUseCompoundFile(false);
+    	
+    	if(null != similarity) indexWriterConf.setSimilarity(similarity);
+    	
+    	try {
+			iwriter = new IndexWriter(FSDirectory.open(FileSystems.getDefault().getPath(INDEXDIR)), indexWriterConf);
+    	} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+    }
+    
+    private BufferedReader getFileBuffer() throws FileNotFoundException {
+		
+		return new BufferedReader(new FileReader(filePath));
+	}
+    
+    private void addField(String id, String content, Document doc, FieldInitType initType) {
+    	Field field;
+    	switch (initType) {
+		case IntField: field = new IntField(id, Integer.valueOf(content), fieldType);
+			break;
+		case TextField: field = new TextField(id, content, Field.Store.YES);
+			break;
+		default: field = new Field(id, content, fieldType);
+			break;
+		}
+		doc.add(field);
+	}
+    
+    public void IndexPublications()
+    {
+    	if(null != iwriter && null != fieldType)
+    	{
+    		long beginningTime = System.currentTimeMillis();
+    		try {
+				BufferedReader br = getFileBuffer();
+				String documentLine;
+				
+				if(iwriter.isOpen())
+				{
+				
+				while(null != (documentLine = br.readLine()))
+				{
+					Document document = new Document(); // instantiate a new doc for each publication line
+					String columns[] = documentLine.split("\t"); //split into columns
+					
+					addField(IDFIELD, columns[ID], document, FieldInitType.IntField); // add the id
+					addField(CONTENTFIELD,columns[CONTENT], document, FieldInitType.TextField); // add the content
+					
+					iwriter.addDocument(document);
+				}
+				
+				br.close();
+				iwriter.close();
+				iwriter.getDirectory().close();
+				System.out.println("Index créé à " + FileSystems.getDefault().getPath(INDEXDIR).toAbsolutePath().toString());
+			
+				}
+				else
+				{
+					System.out.println("Indexation impossible...");
+				}
+    		} catch (FileNotFoundException e) {
+				System.out.println(e.getMessage());
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+    		long endTime = System.currentTimeMillis();
+    		System.out.println("Temps total pour l'indexation: " + (endTime - beginningTime)+ "ms");
+    	}
+    	else
+    	{
+    		System.out.println("Impossible de lancer l'indexation.");
+    	}
+    }
+}

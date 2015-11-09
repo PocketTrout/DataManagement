@@ -1,0 +1,36 @@
+package datamanagement.labo1.indexing;
+
+import java.io.IOException;
+import java.nio.file.FileSystems;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.StopAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.shingle.ShingleAnalyzerWrapper;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		AnalyzersType type = AnalyzersType.Standard; //change here to select analyzer
+		int minShingle = 2, maxShingle = 2;
+		
+		Analyzer analyzer = null;
+		switch(type)
+		{
+		case AnalyzersType.WhiteSpace: analyzer = new WhitespaceAnalyzer();
+			break;
+		case AnalyzersType.Shingle: analyzer = new ShingleAnalyzerWrapper(minShingle, maxShingle);
+			break;
+		case AnalyzersType.Stop: try {
+				analyzer = new StopAnalyzer(FileSystems.getDefault().getPath("dataMgt/commons.txt"));
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+			break;
+		case Standard: 
+		default: analyzer = new StandardAnalyzer();
+		}
+	}
+}

@@ -1,0 +1,24 @@
+package Searching;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.queryparser.classic.QueryParser;
+
+public class Lab1Searcher {
+
+	private Analyzer analyzer;
+	private IndexSearcher iSearcher;
+	
+	public Lab1Searcher(Analyzer analyzer, IndexSearcher indexSearcher)
+	{
+		this.analyzer = analyzer;
+		this.iSearcher = indexSearcher;
+	}
+	
+	public TopDocs proceedQuery(String queryText)
+	{
+		QueryParser queryParser = new QueryParser("summary", analyzer);
+	}
+}

@@ -1,0 +1,5 @@
+package datamanagement.labo2.indexing;
+
+public class IndexNamesStore {
+	public static final String STANDARD = "standard";
+}

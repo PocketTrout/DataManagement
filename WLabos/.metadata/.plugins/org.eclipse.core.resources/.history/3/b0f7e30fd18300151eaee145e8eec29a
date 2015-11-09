@@ -1,0 +1,67 @@
+package datamanagement.labo2.indexing;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.util.ArrayList;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.StopAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.shingle.ShingleAnalyzerWrapper;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.util.CharArraySet;
+
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		AnalyzersType type = AnalyzersType.English; //change here to select analyzer
+		String selectedAnalyzer = "";
+		Analyzer analyzer = null;
+		switch(type)
+		{
+		case WhiteSpace: analyzer = new WhitespaceAnalyzer();
+			selectedAnalyzer = "WhiteSpace";
+			break;
+		case EnglishStop: try {
+				analyzer = new EnglishAnalyzer();
+				selectedAnalyzer = "EnglishStop";
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+			break;
+		case English: analyzer = new EnglishAnalyzer();
+			selectedAnalyzer = "English";
+			break;
+		case Standard: 
+		default: analyzer = new StandardAnalyzer();
+			selectedAnalyzer = "Standard";
+		}
+		
+		if(null != analyzer)
+		{
+			System.out.println("Sélection de l'analyzer de type : " + selectedAnalyzer);
+			Lab2Indexer indexer;
+			indexer = new Lab2Indexer(analyzer, "cacm.txt", selectedAnalyzer);
+			indexer.IndexPublications();
+		}
+	}
+	
+	public static CharArraySet getStopWords(String path) throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new FileReader("common_words.txt"));
+		ArrayList<String> stopWords = new ArrayList<String>();
+		String line;
+		while(null != (line = reader.readLine()))
+		{
+			stopWords.add(line);
+		}
+		reader.close();
+		return new CharArraySet(stopWords, true);
+	}
+}

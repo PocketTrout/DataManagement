@@ -1,0 +1,25 @@
+package datamanagement.labo1.indexing;
+
+import org.apache.lucene.analysis.Analyzer;
+
+public class Main {
+	
+	public enum AnalyzerType { Standard, WhiteSpace, Shingle, Stop };
+	
+	public static void main(String[] args) {
+		
+		AnalyzerType type = Standard; //change here to select analyzer
+		Analyzer analyzer = null;
+		switch(type)
+		{
+		case Standard:
+			break;
+		case WhiteSpace:
+			break;
+		case Shingle:
+			break;
+		case Stop:
+			break;
+		}
+	}
+}

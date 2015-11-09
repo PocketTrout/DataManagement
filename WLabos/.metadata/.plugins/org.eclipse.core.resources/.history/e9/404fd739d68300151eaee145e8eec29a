@@ -1,0 +1,23 @@
+package datamanagement.labo2.searching;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+
+import datamanagement.labo2.indexing.AnalyzersType;
+import datamanagement.labo2.indexing.IndexNamesStore;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		AnalyzersType analyzerType = AnalyzersType.Standard;
+		Analyzer analyzer = null;
+		String indexName = indexName = IndexNamesStore.IndexNameForAnalyzerType(analyzerType);
+		
+		switch(analyzerType)
+		{
+		case Standard: analyzer = new StandardAnalyzer();
+			
+		}
+	}
+	
+}

@@ -1,0 +1,38 @@
+package datamanagement.labo2.searching;
+
+import java.io.IOException;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+
+import datamanagement.labo2.indexing.AnalyzersType;
+import datamanagement.labo2.indexing.IndexNamesStore;
+import datamanagement.labo2.tools.StopWordsReader;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		AnalyzersType type = AnalyzersType.Standard;
+		Analyzer analyzer = null;
+		String indexName = IndexNamesStore.IndexNameForAnalyzerType(analyzerType);
+		
+		switch(type)
+		{
+		case WhiteSpace: analyzer = new WhitespaceAnalyzer();
+			break;
+		case EnglishStop: try {
+				analyzer = new EnglishAnalyzer(StopWordsReader.getStopWords("common_words.txt"));
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+			break;
+		case English: analyzer = new EnglishAnalyzer();
+			break;
+		case Standard: 
+		default: analyzer = new StandardAnalyzer();
+		}
+	}
+	
+}

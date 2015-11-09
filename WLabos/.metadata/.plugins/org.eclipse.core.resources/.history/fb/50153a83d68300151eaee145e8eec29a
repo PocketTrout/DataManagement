@@ -1,0 +1,5 @@
+package datamanagement.labo2.tools;
+
+public class StopWordsReader {
+
+}

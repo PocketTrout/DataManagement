@@ -1,0 +1,10 @@
+package datamanagement.labo2.searching;
+
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+	}
+	
+}

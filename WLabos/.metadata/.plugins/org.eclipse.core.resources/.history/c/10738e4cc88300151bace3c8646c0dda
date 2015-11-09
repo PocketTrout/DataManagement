@@ -1,0 +1,21 @@
+package datamanagement.labo2.indexing;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.search.similarities.DefaultSimilarity;
+
+public class lab2Indexer {
+
+	private IndexWriter iwriter;
+	private String filePath;
+	private Analyzer analyzer;
+	private DefaultSimilarity similarity;
+	private FieldType fieldType;
+	
+	private static final int ID = 0;
+	private static final int CONTENT = 1;
+	public static final String IDFIELD = "id";
+	public static final String SUMMARYFIELD = "content";
+	public static final String INDEXDIR = "index";
+}
