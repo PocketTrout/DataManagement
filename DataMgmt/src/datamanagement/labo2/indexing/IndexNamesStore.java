@@ -13,7 +13,7 @@ public class IndexNamesStore {
 		case WhiteSpace: return WHITESPACE;
 		case EnglishStop: return ENGLISH_STOP;
 		case Standard: 
-		default: return ENGLISH;
+		default: return STANDARD;
 		}
 	}
 

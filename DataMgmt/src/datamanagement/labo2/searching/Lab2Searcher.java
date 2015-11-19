@@ -63,7 +63,7 @@ public class Lab2Searcher {
 	
 	public TopDocs proceedQuery(String queryText, int numberOfTopDocs) throws IOException, ParseException
 	{
-		QueryParser queryParser = new QueryParser(Lab1Indexer.SUMMARYFIELD, analyzer);
+		QueryParser queryParser = new QueryParser(Lab2Indexer.CONTENTFIELD, analyzer);
 		Query query = queryParser.parse(queryText);
 		
 		TopDocs results = iSearcher.search(query, numberOfTopDocs);	

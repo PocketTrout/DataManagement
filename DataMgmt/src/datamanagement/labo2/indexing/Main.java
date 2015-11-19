@@ -17,36 +17,38 @@ import datamanagement.labo2.tools.StopWordsReader;
 public class Main {
 	
 	public static void main(String[] args) {
-		
-		AnalyzersType type = AnalyzersType.WhiteSpace; //change here to select analyzer
 		String selectedAnalyzer = "";
 		Analyzer analyzer = null;
-		switch(type)
-		{
-		case WhiteSpace: analyzer = new WhitespaceAnalyzer();
-			selectedAnalyzer = IndexNamesStore.WHITESPACE;
-			break;
-		case EnglishStop: try {
-				analyzer = new EnglishAnalyzer(StopWordsReader.getStopWords("common_words.txt"));
-				selectedAnalyzer = IndexNamesStore.ENGLISH_STOP;
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
-			}
-			break;
-		case English: analyzer = new EnglishAnalyzer();
-			selectedAnalyzer = IndexNamesStore.ENGLISH;
-			break;
-		case Standard: 
-		default: analyzer = new StandardAnalyzer();
-			selectedAnalyzer = IndexNamesStore.STANDARD;
-		}
 		
-		if(null != analyzer)
+		for(AnalyzersType type: AnalyzersType.values())
 		{
-			System.out.println("Sélection de l'analyzer de type : " + selectedAnalyzer);
-			Lab2Indexer indexer;
-			indexer = new Lab2Indexer(analyzer, "cacm.txt", selectedAnalyzer);
-			indexer.IndexPublications();
+			switch(type)
+			{
+			case WhiteSpace: analyzer = new WhitespaceAnalyzer();
+				selectedAnalyzer = IndexNamesStore.WHITESPACE;
+				break;
+			case EnglishStop: try {
+					analyzer = new EnglishAnalyzer(StopWordsReader.getStopWords("common_words.txt"));
+					selectedAnalyzer = IndexNamesStore.ENGLISH_STOP;
+				} catch (IOException e) {
+					System.out.println(e.getMessage());
+				}
+				break;
+			case English: analyzer = new EnglishAnalyzer();
+				selectedAnalyzer = IndexNamesStore.ENGLISH;
+				break;
+			case Standard: 
+			default: analyzer = new StandardAnalyzer();
+				selectedAnalyzer = IndexNamesStore.STANDARD;
+			}
+			
+			if(null != analyzer)
+			{
+				System.out.println("Sélection de l'analyzer de type : " + selectedAnalyzer);
+				Lab2Indexer indexer;
+				indexer = new Lab2Indexer(analyzer, "cacm.txt", selectedAnalyzer);
+				indexer.IndexPublications();
+			}
 		}
 	}
 }
